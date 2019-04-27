@@ -1,8 +1,29 @@
 from django.db import models
 
+#colors https://colorscheme.ru/web-safe-colors.html
+
+class Group(models.Model):
+    id = models.IntegerField(primary_key=True)
+    title = models.CharField(max_length=40)
+    id_prerequisite = models.IntegerField()
+    background_color = models.TextField()
+
+    def get_groups(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'id_prerequisite': self.id_prerequisite,
+            'background_color': self.background_color,
+        }
+
+    # def __str__(self):
+    #     return {
+    #         self.title
+    #     }
+
 class Qa(models.Model):
-    id = models.IntegerField(),
-    id_group = models.IntegerField(primary_key=True)
+    id = models.IntegerField(primary_key=True)
+    id_grocup = models.ForeignKey(Group, on_delete=models.CASCADE)
     question = models.CharField(max_length=512)
     answer_1 = models.CharField(max_length=40)
     answer_2 = models.CharField(max_length=40)
@@ -13,7 +34,6 @@ class Qa(models.Model):
     def get_questions(self):
         return {
             'id': self.id,
-            'id_group': self.id_group,
             'question': self.question,
             'answer_1': self.answer_1,
             'answer_2': self.answer_2,
@@ -22,22 +42,35 @@ class Qa(models.Model):
             'answer_right': self.answer_right,
         }
 
-class Group(models.Model):
-    id = models.IntegerField(primary_key=True)
-    title = models.CharField(max_length=40)
-    id_prerequisite = models.IntegerField()
+    # def __str__(self):
+    #     return {
+    #         self.question
+    #     }
 
-    def get_groups(self):
-        return {
-            'id': self.id,
-            'title': self.title,
-            'id_prerequisite': self.id_prerequisite,
-        }
 
 class User(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=40)
     points = models.IntegerField()
+    password = models.CharField(max_length=40)
+
+    def get_password(self):
+        return {
+            'password' : self.password,
+        }
+
+    def get_user_points(self):
+        return {
+            'points': self.points,
+        }
+
+    def get_user(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'points': self.points,
+        }
+
 
 class Data(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -45,6 +78,15 @@ class Data(models.Model):
     id_group = models.ForeignKey(Group, on_delete=models.CASCADE)
     points = models.IntegerField()
 
+    # def __str__(self):
+    #     return {
+    #         self.points
+    #     }
+
+    def get_group_points(self):
+        return {
+            'points': self.points,
+        }
 
 
 # name = models.CharField(max_length=255)
